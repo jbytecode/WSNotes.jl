@@ -62,5 +62,20 @@ function getnotes(db::SQLite.DB)::Vector{Note}
     return notes
 end 
 
+function searchkeyword(db::SQLite.DB, keyword::AbstractString)::Vector{Note}
+    sql = """
+    SELECT id, datetime, subject, content 
+    FROM Notes 
+    WHERE datetime LIKE ? OR subject LIKE ? OR content LIKE ?
+    ORDER BY datetime DESC
+    """
+    result = DBInterface.execute(db, sql, ["%$keyword%", "%$keyword%", "%$keyword%"])
+    notes = Note[]
+    for row in result
+        push!(notes, Note(row[1], row[2], row[3], row[4]))
+    end 
+    return notes
+end 
+
 
 end 

@@ -126,3 +126,29 @@ end
     
     HTTP.WebSockets.close(ws)
 end 
+
+@testset "Search keyword test" begin 
+    url = "ws://localhost:8000"
+    ws = HTTP.WebSockets.open(url)
+    # Insert new 
+    datetime = "2024-06-01T12:00:00"
+    subject = "Searchable Note"
+    content = "This note contains a unique keyword: foobar."
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "addnote", "datetime" => datetime, "subject" => subject, "content" => content)))
+    response = HTTP.WebSockets.receive(ws)
+    parsedresponse = JSON.parse(response)
+    @test parsedresponse["type"] == "addnote_response"
+    id = parsedresponse["id"]
+
+    # Search for the keyword
+    keyword = "foobar"
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "search", "keyword" => keyword)))
+    response = HTTP.WebSockets.receive(ws)
+    parsedresponse = JSON.parse(response)
+    @test parsedresponse["type"] == "search_response"
+    @test haskey(parsedresponse, "notes")
+    notes = parsedresponse["notes"]
+    @test any(note -> note["id"] == id, notes)
+
+    HTTP.WebSockets.close(ws)
+end 
