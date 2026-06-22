@@ -6,7 +6,7 @@ using SQLite
 export Note, opendb, closedb, createtables, addnote, updatenote, deletenote, getnote, getnotes
 
 struct Note 
-    id::UInt64
+    id::Int64
     datetime::AbstractString 
     subject::AbstractString
     content::AbstractString
