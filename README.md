@@ -2,9 +2,9 @@
 Personal Notes App with WebSockets in Julia
 
 
-# How to run?
+# How to run? 
 
-Simple clone the repo:
+Clone the repo:
 
 ```shell
 git clone https://github.com/jbytecode/WSNotes.jl.git
