@@ -1,8 +1,14 @@
 using Test, WSNotes
 using HTTP, JSON 
 
+@info "Deleting the test database if it exists"
+dbpath = "notes-test.db"
+if isfile(dbpath)
+    rm(dbpath)
+end
+
 # Before tests, start the server in a separate task 
-@async WSNotes.run()
+@async WSNotes.run(dbpath=dbpath, host="localhost", port=8000)
 
 sleep(2)
 
