@@ -33,6 +33,19 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 id = DB.addnote(db, datetime, subject, content)
                 retmessage = JSON.json(Dict("type" => "addnote_response", "id" => id))
                 HTTP.WebSockets.send(ws, retmessage)
+            elseif type == "updatenote"
+                id = get(parsedmessage, "id", 0)
+                datetime = get(parsedmessage, "datetime", "")
+                subject = get(parsedmessage, "subject", "")
+                content = get(parsedmessage, "content", "")
+                DB.updatenote(db, id, datetime, subject, content)
+                retmessage = JSON.json(Dict("type" => "updatenote_response", "id" => id, "subject" => subject, "content" => content))
+                HTTP.WebSockets.send(ws, retmessage)
+            elseif type == "deletenote"
+                id = get(parsedmessage, "id", 0)
+                DB.deletenote(db, id)
+                retmessage = JSON.json(Dict("type" => "deletenote_response", "id" => id))
+                HTTP.WebSockets.send(ws, retmessage)
             elseif type == "getnote"
                 id = get(parsedmessage, "id", 0)
                 note = DB.getnote(db, id)

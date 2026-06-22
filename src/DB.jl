@@ -36,22 +36,21 @@ function addnote(db::SQLite.DB, datetime::AbstractString, subject::AbstractStrin
     return SQLite.last_insert_rowid(db)
 end 
 
-function updatenote(db::SQLite.DB, id::UInt64, datetime::AbstractString, subject::AbstractString, content::AbstractString)
+function updatenote(db::SQLite.DB, id::Int64, datetime::AbstractString, subject::AbstractString, content::AbstractString)
     SQLite.execute(db, "UPDATE Notes SET datetime = ?, subject = ?, content = ? WHERE id = ?", [datetime, subject, content, id])
 end 
 
-function deletenote(db::SQLite.DB, id::UInt64)
+function deletenote(db::SQLite.DB, id::Int64)
     SQLite.execute(db, "DELETE FROM Notes WHERE id = ?", [id])
 end 
 
-function getnote(db::SQLite.DB, id::UInt64)::Union{Note, Nothing}
-    result = DBInterface.execute(db, "SELECT id, datetime, subject, content FROM Notes WHERE id = ?", id)
-    row = DBInterface.fetchone(result)
-    if row === nothing
-        return nothing
-    else
+function getnote(db::SQLite.DB, id::Int64)::Union{Note, Nothing}
+    result = DBInterface.execute(db, "SELECT id, datetime, subject, content FROM Notes WHERE id = $id")
+    for row in result
+        # single result, early termination
         return Note(row[1], row[2], row[3], row[4])
-    end 
+    end
+    return nothing
 end 
 
 function getnotes(db::SQLite.DB)::Vector{Note}
