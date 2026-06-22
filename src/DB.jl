@@ -54,7 +54,12 @@ function getnote(db::SQLite.DB, id::Int64)::Union{Note, Nothing}
 end 
 
 function getnotes(db::SQLite.DB)::Vector{Note}
-    result = DBInterface.execute(db, "SELECT id, datetime, subject, content FROM Notes")
+    sql = """
+    SELECT id, datetime, subject, content 
+    FROM Notes 
+    ORDER BY datetime DESC
+    """
+    result = DBInterface.execute(db, sql)
     notes = Note[]
     for row in result
         push!(notes, Note(row[1], row[2], row[3], row[4]))

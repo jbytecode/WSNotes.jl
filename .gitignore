@@ -29,4 +29,4 @@ JuliaLocalPreferences.toml
 test/notes.db
 test/notes-test.db
 notes.db
-
+.vscode/

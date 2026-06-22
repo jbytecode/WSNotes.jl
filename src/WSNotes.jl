@@ -7,7 +7,7 @@ using SQLite, HTTP, JSON
 include("DB.jl")
 import .DB
 
-export run 
+export run, HTTP
 
 
 function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.db")
