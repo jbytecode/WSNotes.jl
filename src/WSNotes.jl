@@ -23,8 +23,7 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 retmessage = JSON.json(Dict("type" => "pong"))
                 HTTP.WebSockets.send(ws, retmessage)
             elseif type == "shutdown"
-                HTTP.WebSockets.forceclose(ws)
-                @info "WSNotes.jl server is shutting down."
+                @info "Shutdown message received. Closing WebSocket connection and shutting down the server..."
                 exit(0)
             elseif type == "addnote"
                 datetime = get(parsedmessage, "datetime", "")
@@ -79,7 +78,7 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
 
     @info "WebSocket server running on $host:$port, using database at $dbpath"
     @info "Open the index.html file in the browser to connect to the server and start taking notes."
-    HTTP.WebSockets.listen(messagehandler, host, port, check_origin=corshandler)
+    server = HTTP.WebSockets.listen(messagehandler, host, port, check_origin=corshandler)
     # Code is blocking, so the server will keep running until it is shut down by a "shutdown" message or by interrupting the process.
 end 
 

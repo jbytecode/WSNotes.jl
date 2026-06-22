@@ -103,7 +103,7 @@ const getNotes = () => {
     console.log("Sent getnotes message:", getNotesMessage);
 };
 
-const shutDownServer = () => {
+const shutdownServer = () => {
     const shutdownMessage = JSON.stringify({
         type: "shutdown"
     });
