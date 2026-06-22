@@ -2,6 +2,12 @@
 Personal Notes App with WebSockets in Julia
 
 
+# Why?
+
+I was looking for the best UI tool for Julia. 
+HTTP.jl and WebSockets look like the best light-weight tool 
+for communicating Julia and browser. This is my proof-of-concept app to get things together. 
+
 # How to run? 
 
 Clone the repo:
