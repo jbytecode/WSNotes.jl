@@ -31,7 +31,7 @@ function createtables(db::SQLite.DB)
     """)
 end 
 
-function addnote(db::SQLite.DB, datetime::AbstractString, subject::AbstractString, content::AbstractString)::UInt64
+function addnote(db::SQLite.DB, datetime::AbstractString, subject::AbstractString, content::AbstractString)::Int64
     SQLite.execute(db, "INSERT INTO Notes (datetime, subject, content) VALUES (?, ?, ?)", [datetime, subject, content])
     return SQLite.last_insert_rowid(db)
 end 

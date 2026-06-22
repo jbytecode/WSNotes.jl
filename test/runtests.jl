@@ -51,7 +51,8 @@ end
     id = 1
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
-    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "getnote", "id" => id)))
+    strid = string(id)
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "getnote", "id" => strid)))
     response = HTTP.WebSockets.receive(ws)
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "getnote_response"
@@ -89,15 +90,16 @@ end
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "addnote_response"
     id = parsedresponse["id"]
+    stride = string(id)
 
     # Update the note
     new_subject = "Updated Note"
     new_content = "This note has been updated."
-    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "updatenote", "id" => id, "datetime" => datetime, "subject" => new_subject, "content" => new_content)))
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "updatenote", "id" => stride, "datetime" => datetime, "subject" => new_subject, "content" => new_content)))
     response = HTTP.WebSockets.receive(ws)
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "updatenote_response"
-    @test parsedresponse["id"] == id
+    @test string(parsedresponse["id"]) == stride
     @test parsedresponse["subject"] == new_subject
     @test parsedresponse["content"] == new_content  
     HTTP.WebSockets.close(ws)
@@ -115,16 +117,17 @@ end
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "addnote_response"
     id = parsedresponse["id"]
+    strid = string(id)
 
     # Delete the note
-    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "deletenote", "id" => id)))
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "deletenote", "id" => strid)))
     response = HTTP.WebSockets.receive(ws)
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "deletenote_response"
-    @test parsedresponse["id"] == id
+    @test string(parsedresponse["id"]) == strid
 
     # Try to get the deleted note
-    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "getnote", "id" => id)))
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "getnote", "id" => strid)))
     response = HTTP.WebSockets.receive(ws)
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "error"
