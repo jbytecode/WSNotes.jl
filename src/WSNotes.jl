@@ -24,6 +24,7 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 HTTP.WebSockets.send(ws, retmessage)
             elseif type == "shutdown"
                 @info "Shutdown message received. Closing WebSocket connection and shutting down the server..."
+                DB.closedb(db)
                 exit(0)
             elseif type == "addnote"
                 datetime = get(parsedmessage, "datetime", "")
