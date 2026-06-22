@@ -59,11 +59,11 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 noteslist = [Dict("id" => note.id, "datetime" => note.datetime, "subject" => note.subject, "content" => note.content) for note in notes]
                 retmessage = JSON.json(Dict("type" => "getnotes_response", "notes" => noteslist))
                 HTTP.WebSockets.send(ws, retmessage)
-            elseif type == "search"
+            elseif type == "searchnotes"
                 query = get(parsedmessage, "keyword", "")
                 notes = DB.searchkeyword(db, query)
                 noteslist = [Dict("id" => note.id, "datetime" => note.datetime, "subject" => note.subject, "content" => note.content) for note in notes]
-                retmessage = JSON.json(Dict("type" => "search_response", "notes" => noteslist))
+                retmessage = JSON.json(Dict("type" => "searchnotes_response", "notes" => noteslist))
                 HTTP.WebSockets.send(ws, retmessage)
             else 
                 retmessage = JSON.json(Dict("type" => "error", "message" => "unknown message type $type"))

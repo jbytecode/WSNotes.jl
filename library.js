@@ -34,6 +34,11 @@ ws.onmessage = function(event) {
         console.log("All records retrieved:", notes);
         console.log("Total records:", notes.length);
         decorateNotesTable(notes); // Call the function to decorate the notes table with the retrieved notes
+    }else if (type === "searchnotes_response") {
+        let notes = message.notes;
+        console.log("Search results retrieved:", notes);
+        console.log("Total search results:", notes.length);
+        decorateNotesTable(notes); // Call the function to decorate the notes table with the search results
     }else{
         console.log("Unknown received message of type:", type);
     }
@@ -109,6 +114,16 @@ const shutdownServer = () => {
     });
     ws.send(shutdownMessage);
     console.log("Sent shutdown message:", shutdownMessage);
+};
+
+
+const searchNotes = (keyword) => {
+    const searchNotesMessage = JSON.stringify({
+        type: "searchnotes",
+        keyword: keyword
+    });
+    ws.send(searchNotesMessage);
+    console.log("Sent searchnotes message:", searchNotesMessage);
 };
 
 // YY-MM-DD HH:MM:SS format

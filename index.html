@@ -7,6 +7,7 @@
     <body>
         <input type="button" id="new-note-button" value="New Note" onclick="addNote(getCurrentDateTime(), 'New Note', 'New Note'); getNotes()">
         <input type="button" id="shutdown-button" value="Shutdown Server" onclick="shutdownServer()">
+        <input type="text" id="search-input" placeholder="Search notes..." oninput="searchNotes(this.value)">
         <dialog id="note-dialog">
             <form id="note-form">
                 <table>
