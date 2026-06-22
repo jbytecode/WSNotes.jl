@@ -34,7 +34,7 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 retmessage = JSON.json(Dict("type" => "addnote_response", "id" => id))
                 HTTP.WebSockets.send(ws, retmessage)
             elseif type == "updatenote"
-                id = get(parsedmessage, "id", 0)
+                id = parse(Int64, parsedmessage["id"])
                 datetime = get(parsedmessage, "datetime", "")
                 subject = get(parsedmessage, "subject", "")
                 content = get(parsedmessage, "content", "")
@@ -42,12 +42,12 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 retmessage = JSON.json(Dict("type" => "updatenote_response", "id" => id, "subject" => subject, "content" => content))
                 HTTP.WebSockets.send(ws, retmessage)
             elseif type == "deletenote"
-                id = get(parsedmessage, "id", 0)
+                id = parse(Int64, parsedmessage["id"])
                 DB.deletenote(db, id)
                 retmessage = JSON.json(Dict("type" => "deletenote_response", "id" => id))
                 HTTP.WebSockets.send(ws, retmessage)
             elseif type == "getnote"
-                id = get(parsedmessage, "id", 0)
+                id = parse(Int64, parsedmessage["id"])
                 note = DB.getnote(db, id)
                 if note === nothing
                     retmessage = JSON.json(Dict("type" => "error", "message" => "note with id $id not found"))
@@ -83,6 +83,10 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
     # Code is blocking, so the server will keep running until it is shut down by a "shutdown" message or by interrupting the process.
 end 
 
+
+function __init__()
+    @info "WSNotes.jl module loaded. Use WSNotes.run() to start the WebSocket server."
+end 
 
 
 end # module WSNotes

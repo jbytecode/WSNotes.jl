@@ -1,0 +1,46 @@
+<html>
+    <head>
+        <title>WSNotes.jl - A simple WebSocket-based note-taking application in Julia.</title>
+        <script defer src="library.js"></script>
+    </head>
+    <body>
+        <input type="button" id="new-note-button" value="New Note" onclick="addNote(getCurrentDateTime(), 'New Note', 'New Note'); getNotes()">
+        <dialog id="note-dialog">
+            <form id="note-form">
+                <table>
+                    <tr>
+                        <td><label for="note-id">id:</label></td>
+                        <td><input type="text" id="note-id" name="note-id" readonly></td>
+                    </tr>
+                    <tr>
+                        <td><label for="note-datetime">datetime:</label></td>
+                        <td><input type="text" id="note-datetime" name="note-datetime"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="note-subject">subject:</label></td>
+                        <td><input type="text" id="note-subject" name="note-subject"></td>
+                    </tr>
+                    <tr>
+                        <td><label for="note-content">content:</label></td>
+                        <td><textarea id="note-content" name="note-content" rows="10" cols="30"></textarea></td>
+                    </tr>
+                </table>
+                <button type="button" id="update-button" onclick="DialogUpdate()">Update</button>
+                <button type="button" id="delete-button" onclick="DialogDelete()">Delete</button>
+                <button type="button" id="cancel-button" onclick="hideNoteDetails()">Cancel</button>
+            </form>
+        </dialog>
+        <table>
+            <thead>
+                <tr>
+                    <th>id</th>
+                    <th>datetime</th>
+                    <th>subject</th>
+                    <th>content</th>
+                </tr>
+            </thead>
+            <tbody id="notes-table-body">
+            </tbody>
+        </table>
+    </body>
+</html>
