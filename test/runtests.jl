@@ -151,10 +151,10 @@ end
 
     # Search for the keyword
     keyword = "foobar"
-    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "search", "keyword" => keyword)))
+    HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "searchnotes", "keyword" => keyword)))
     response = HTTP.WebSockets.receive(ws)
     parsedresponse = JSON.parse(response)
-    @test parsedresponse["type"] == "search_response"
+    @test parsedresponse["type"] == "searchnotes_response"
     @test haskey(parsedresponse, "notes")
     notes = parsedresponse["notes"]
     @test any(note -> note["id"] == id, notes)
