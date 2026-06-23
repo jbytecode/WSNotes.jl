@@ -1,11 +1,11 @@
 const ws = new WebSocket("ws://localhost:8000/ws");
 
-ws.onopen = function(event) {
+ws.onopen = function (event) {
     console.log("WebSocket connection established. Sending ping message...");
     sendPing();
 };
 
-ws.onmessage = function(event) {
+ws.onmessage = function (event) {
     const message = JSON.parse(event.data);
     console.log("Received message:", message);
     let type = message.type;
@@ -13,43 +13,43 @@ ws.onmessage = function(event) {
         console.log("Received pong message.");
         // Now its time to get all notes from the server
         getNotes();
-    }else if (type === "error"){
+    } else if (type === "error") {
         alert("Error from server: " + message.message);
-    }else if (type === "addnote_response") {
+    } else if (type === "addnote_response") {
         console.log("New record save with id :", message.id);
-    }else if (type === "updatenote_response") {
+    } else if (type === "updatenote_response") {
         console.log("Record updated with id :", message.id);
         getNotes(); // Refresh the notes table after update
-    }else if (type === "deletenote_response") {
+    } else if (type === "deletenote_response") {
         console.log("Record deleted with id :", message.id);
         getNotes(); // Refresh the notes table after deletion
-    }else if (type === "getnote_response") {
+    } else if (type === "getnote_response") {
         let id = message.note.id;
         let datetime = message.note.datetime;
         let subject = message.note.subject;
         let content = message.note.content;
-        console.log("Record retrieved:", {id, datetime, subject, content});
-    }else if (type === "getnotes_response") {
+        console.log("Record retrieved:", { id, datetime, subject, content });
+    } else if (type === "getnotes_response") {
         let notes = message.notes;
         console.log("All records retrieved:", notes);
         console.log("Total records:", notes.length);
         decorateNotesTable(notes); // Call the function to decorate the notes table with the retrieved notes
-    }else if (type === "searchnotes_response") {
+    } else if (type === "searchnotes_response") {
         let notes = message.notes;
         console.log("Search results retrieved:", notes);
         console.log("Total search results:", notes.length);
         decorateNotesTable(notes); // Call the function to decorate the notes table with the search results
-    }else{
+    } else {
         console.log("Unknown received message of type:", type);
     }
 };
 
-ws.onclose = function(event) {
+ws.onclose = function (event) {
     console.log("WebSocket connection closed. Event: ", event);
     console.log("Error: ", event.reason);
 };
 
-ws.onerror = function(error) {
+ws.onerror = function (error) {
     console.error("WebSocket error:", error);
 };
 
@@ -136,7 +136,7 @@ const getCurrentDateTime = () => {
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    
+
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 };
 

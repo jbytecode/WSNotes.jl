@@ -1,51 +1,55 @@
 <html>
-    <head>
-        <title>WSNotes.jl - A simple WebSocket-based note-taking application in Julia.</title>
-        <link rel="stylesheet" href="styles.css">
-        <script defer src="library.js"></script>
-    </head>
-    <body>
-        <input type="button" id="new-note-button" value="New Note" onclick="addNote(getCurrentDateTime(), 'New Note', 'New Note'); getNotes()">
-        <input type="button" id="refresh-button" value="Refresh Notes" onclick="getNotes()">
-        <input type="button" id="shutdown-button" value="Shutdown Server" onclick="shutdownServer()">
-        <input type="text" id="search-input" placeholder="Search notes..." oninput="searchNotes(this.value)">
-        <dialog id="note-dialog">
-            <form id="note-form">
-                <table>
-                    <tr>
-                        <td><label for="note-id">id:</label></td>
-                        <td><input type="text" id="note-id" name="note-id" readonly></td>
-                    </tr>
-                    <tr>
-                        <td><label for="note-datetime">datetime:</label></td>
-                        <td><input type="text" id="note-datetime" name="note-datetime"></td>
-                    </tr>
-                    <tr>
-                        <td><label for="note-subject">subject:</label></td>
-                        <td><input type="text" id="note-subject" name="note-subject"></td>
-                    </tr>
-                    <tr>
-                        <td><label for="note-content">content:</label></td>
-                        <td><textarea id="note-content" name="note-content" rows="10" cols="30"></textarea></td>
-                    </tr>
-                </table>
-                <button type="button" id="update-button" onclick="DialogUpdate()">Update</button>
-                <button type="button" id="delete-button" onclick="DialogDelete()">Delete</button>
-                <button type="button" id="cancel-button" onclick="hideNoteDetails()">Cancel</button>
-            </form>
-        </dialog>
-        <table>
-            <thead>
+
+<head>
+    <title>WSNotes.jl - A simple WebSocket-based note-taking application in Julia.</title>
+    <link rel="stylesheet" href="styles.css">
+    <script defer src="library.js"></script>
+</head>
+
+<body>
+    <input type="button" id="new-note-button" value="New Note"
+        onclick="addNote(getCurrentDateTime(), 'New Note', 'New Note'); getNotes()">
+    <input type="button" id="refresh-button" value="Refresh Notes" onclick="getNotes()">
+    <input type="button" id="shutdown-button" value="Shutdown Server" onclick="shutdownServer()">
+    <input type="text" id="search-input" placeholder="Search notes..." oninput="searchNotes(this.value)">
+    <dialog id="note-dialog">
+        <form id="note-form">
+            <table>
                 <tr>
-                    <th>id</th>
-                    <th>datetime</th>
-                    <th>subject</th>
-                    <th>content</th>
+                    <td><label for="note-id">id:</label></td>
+                    <td><input type="text" id="note-id" name="note-id" readonly></td>
                 </tr>
-            </thead>
-            <tbody id="notes-table-body">
-            </tbody>
-        </table>
-        <h4>Last 10 notes are displayed. Use search to find more notes.</h4>
-    </body>
+                <tr>
+                    <td><label for="note-datetime">datetime:</label></td>
+                    <td><input type="text" id="note-datetime" name="note-datetime"></td>
+                </tr>
+                <tr>
+                    <td><label for="note-subject">subject:</label></td>
+                    <td><input type="text" id="note-subject" name="note-subject"></td>
+                </tr>
+                <tr>
+                    <td><label for="note-content">content:</label></td>
+                    <td><textarea id="note-content" name="note-content" rows="10" cols="30"></textarea></td>
+                </tr>
+            </table>
+            <button type="button" id="update-button" onclick="DialogUpdate()">Update</button>
+            <button type="button" id="delete-button" onclick="DialogDelete()">Delete</button>
+            <button type="button" id="cancel-button" onclick="hideNoteDetails()">Cancel</button>
+        </form>
+    </dialog>
+    <table>
+        <thead>
+            <tr>
+                <th>id</th>
+                <th>datetime</th>
+                <th>subject</th>
+                <th>content</th>
+            </tr>
+        </thead>
+        <tbody id="notes-table-body">
+        </tbody>
+    </table>
+    <h4>Last 10 notes are displayed. Use search to find more notes.</h4>
+</body>
+
 </html>

@@ -1,57 +1,60 @@
-module DB 
+module DB
 
 using SQLite
 
 
 export Note, opendb, closedb, createtables, addnote, updatenote, deletenote, getnote, getnotes
 
-struct Note 
+struct Note
     id::Int64
-    datetime::AbstractString 
+    datetime::AbstractString
     subject::AbstractString
     content::AbstractString
-end 
+end
 
 function opendb(dbpath::String)::SQLite.DB
     return SQLite.DB(dbpath)
-end 
+end
 
 function closedb(db::SQLite.DB)
     SQLite.close(db)
-end 
+end
 
 function createtables(db::SQLite.DB)
-    DBInterface.execute(db, """
-        CREATE TABLE IF NOT EXISTS Notes (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            datetime TEXT NOT NULL,
-            subject TEXT NOT NULL,
-            content TEXT NOT NULL
-        )
-    """)
-end 
+    DBInterface.execute(
+        db,
+        """
+    CREATE TABLE IF NOT EXISTS Notes (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        datetime TEXT NOT NULL,
+        subject TEXT NOT NULL,
+        content TEXT NOT NULL
+    )
+"""
+    )
+end
 
 function addnote(db::SQLite.DB, datetime::AbstractString, subject::AbstractString, content::AbstractString)::Int64
     SQLite.execute(db, "INSERT INTO Notes (datetime, subject, content) VALUES (?, ?, ?)", [datetime, subject, content])
     return SQLite.last_insert_rowid(db)
-end 
+end
 
 function updatenote(db::SQLite.DB, id::Int64, datetime::AbstractString, subject::AbstractString, content::AbstractString)
     SQLite.execute(db, "UPDATE Notes SET datetime = ?, subject = ?, content = ? WHERE id = ?", [datetime, subject, content, id])
-end 
+end
 
 function deletenote(db::SQLite.DB, id::Int64)
     SQLite.execute(db, "DELETE FROM Notes WHERE id = ?", [id])
-end 
+end
 
-function getnote(db::SQLite.DB, id::Int64)::Union{Note, Nothing}
+function getnote(db::SQLite.DB, id::Int64)::Union{Note,Nothing}
     result = DBInterface.execute(db, "SELECT id, datetime, subject, content FROM Notes WHERE id = $id")
     for row in result
         # single result, early termination
         return Note(row[1], row[2], row[3], row[4])
     end
     return nothing
-end 
+end
 
 function getnotes(db::SQLite.DB)::Vector{Note}
     sql = """
@@ -64,9 +67,9 @@ function getnotes(db::SQLite.DB)::Vector{Note}
     notes = Note[]
     for row in result
         push!(notes, Note(row[1], row[2], row[3], row[4]))
-    end 
+    end
     return notes
-end 
+end
 
 function searchkeyword(db::SQLite.DB, keyword::AbstractString)::Vector{Note}
     sql = """
@@ -79,9 +82,9 @@ function searchkeyword(db::SQLite.DB, keyword::AbstractString)::Vector{Note}
     notes = Note[]
     for row in result
         push!(notes, Note(row[1], row[2], row[3], row[4]))
-    end 
+    end
     return notes
-end 
+end
 
 
-end 
+end

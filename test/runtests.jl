@@ -1,5 +1,5 @@
 using Test, WSNotes
-using HTTP, JSON 
+using HTTP, JSON
 
 @info "Deleting the test database if it exists"
 dbpath = "notes-test.db"
@@ -12,7 +12,7 @@ end
 
 sleep(2)
 
-@testset "Ping Test" begin 
+@testset "Ping Test" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "ping")))
@@ -20,9 +20,9 @@ sleep(2)
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "pong"
     HTTP.WebSockets.close(ws)
-end 
+end
 
-@testset "Unknown Message Type Test" begin 
+@testset "Unknown Message Type Test" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "unknown")))
@@ -33,7 +33,7 @@ end
     HTTP.WebSockets.close(ws)
 end
 
-@testset "Add Note Test" begin 
+@testset "Add Note Test" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     datetime = "2024-06-01T12:00:00"
@@ -47,7 +47,7 @@ end
     HTTP.WebSockets.close(ws)
 end
 
-@testset "Get Note Test" begin    
+@testset "Get Note Test" begin
     id = 1
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
@@ -64,7 +64,7 @@ end
     HTTP.WebSockets.close(ws)
 end
 
-@testset "Get Notes Test" begin 
+@testset "Get Notes Test" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     HTTP.WebSockets.send(ws, JSON.json(Dict("type" => "getnotes")))
@@ -78,7 +78,7 @@ end
     HTTP.WebSockets.close(ws)
 end
 
-@testset "Update note" begin 
+@testset "Update note" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     # Insert new 
@@ -101,11 +101,11 @@ end
     @test parsedresponse["type"] == "updatenote_response"
     @test string(parsedresponse["id"]) == stride
     @test parsedresponse["subject"] == new_subject
-    @test parsedresponse["content"] == new_content  
+    @test parsedresponse["content"] == new_content
     HTTP.WebSockets.close(ws)
-end 
+end
 
-@testset "Delete note" begin 
+@testset "Delete note" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     # Insert new 
@@ -132,11 +132,11 @@ end
     parsedresponse = JSON.parse(response)
     @test parsedresponse["type"] == "error"
     @test occursin("not found", parsedresponse["message"])
-    
-    HTTP.WebSockets.close(ws)
-end 
 
-@testset "Search keyword test" begin 
+    HTTP.WebSockets.close(ws)
+end
+
+@testset "Search keyword test" begin
     url = "ws://localhost:8000"
     ws = HTTP.WebSockets.open(url)
     # Insert new 
@@ -160,4 +160,4 @@ end
     @test any(note -> note["id"] == id, notes)
 
     HTTP.WebSockets.close(ws)
-end 
+end

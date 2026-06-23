@@ -1,13 +1,13 @@
 module WSNotes
 
 
-using SQLite, HTTP, JSON 
+using SQLite, HTTP, JSON
 
 
 include("DB.jl")
 import .DB
 
-abstract type MessageType end 
+abstract type MessageType end
 struct Ping <: MessageType end
 struct Shutdown <: MessageType end
 struct AddNote <: MessageType end
@@ -127,7 +127,7 @@ end
 
 function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.db")
 
-    corshandler(request, client) = true 
+    corshandler(request, client) = true
 
     function messagehandler(ws)
         for rawmessage in ws
@@ -150,7 +150,7 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
                 handle(GetNotes, ws, db)
             elseif type == "searchnotes"
                 handle(SearchNotes, ws, db, parsedmessage)
-            else 
+            else
                 handle(UnknownMessage, ws, type)
             end
         end
@@ -164,12 +164,12 @@ function run(; host::String="localhost", port::Int=8000, dbpath::String="notes.d
     @info "Open the index.html file in the browser to connect to the server and start taking notes."
     server = HTTP.WebSockets.listen(messagehandler, host, port, check_origin=corshandler)
     # Code is blocking, so the server will keep running until it is shut down by a "shutdown" message or by interrupting the process.
-end 
+end
 
 
 function __init__()
     @info "WSNotes.jl module loaded. Use WSNotes.run() to start the WebSocket server."
-end 
+end
 
 
 end # module WSNotes
