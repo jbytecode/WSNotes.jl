@@ -45,7 +45,8 @@ ws.onmessage = function(event) {
 };
 
 ws.onclose = function(event) {
-    console.log("WebSocket connection closed.");
+    console.log("WebSocket connection closed. Event: ", event);
+    console.log("Error: ", event.reason);
 };
 
 ws.onerror = function(error) {

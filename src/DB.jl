@@ -58,6 +58,7 @@ function getnotes(db::SQLite.DB)::Vector{Note}
     SELECT id, datetime, subject, content 
     FROM Notes 
     ORDER BY datetime DESC
+    LIMIT 10
     """
     result = DBInterface.execute(db, sql)
     notes = Note[]
