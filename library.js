@@ -216,6 +216,10 @@ const DialogUpdate = () => {
 const DialogDelete = () => {
     const noteIdInput = document.getElementById("note-id").value;
     console.log("Deleting note with id:", noteIdInput);
+    // Ask user if they are sure they want to delete the note
+    if (!confirm("Are you sure you want to delete this note?")) {
+        return; // Exit if user cancels
+    }
     deleteNote(noteIdInput);
     hideNoteDetails();
 };
